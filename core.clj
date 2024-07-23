@@ -137,5 +137,70 @@
        (if (= (last s) (- ub 1))
          s 
          (recur (conj s (inc (last s)))))))
+  ;; Problem 35, Local bindings
+  7
 
+  ;; Problem 36, Let it Be
+  ; [x 7 y 3 z 1]
+
+  ;; Problem 37, Regular Expressions
+  "ABC"
+
+  ;; Problem 38, Maximum value
+  (fn [& x]
+     (loop [max (first x) rx (rest x)]
+       (if (empty? rx)
+         max
+         (recur (if (< max (first rx)) (first rx) max) (rest rx)))))
+
+  ;; Problem 39, Interleave Two Seqs
+  (fn [sqa sqb]
+     (loop [sqab [] sqa sqa sqb sqb]
+       (if (or (empty? sqa) (empty? sqb))
+         sqab 
+         (recur (conj sqab (first sqa) (first sqb)) (rest sqa) (rest sqb)))))
+
+  ;; Problem 40, Interpose a Seq
+  (fn [in sq]
+    (reduce #(conj %1 in %2) [(first sq)] (rest sq)))
+
+  ;; Problem 41, Drop Every Nth Item
+  ((fn [sq n]
+     (loop [i 1 sq sq nsq []]
+       (cond (empty? sq) nsq
+             (= i n) (recur 1 (rest sq) nsq)
+             :else (recur (inc i) (rest sq) (conj nsq (first sq)))))) [1 2 3 4 5 6 7 8] 3)
+
+  ;; Problem 42, Factorial Fun
+  (#(reduce * (range 1 (inc %))) 5) 
+
+  ;; Problem 43, Reverse Interleave
+  (fn [sq x]
+     (->> sq 
+          (partition x)
+          (apply map vector)))
+
+  ;; Problem 44, Rotate Sequence
+  (fn [n sqn] 
+    (let [steps (mod n (count sqn))
+          n-el (take steps sqn)
+          rest-sqn (drop steps sqn)]
+      (concat rest-sqn n-el)))
+
+  ;; Problem 45, Intro to Iterate
+  `(1 4 7 10 13)
+
+  ;; Problem 46, Flipping out
+  ((fn [fun]
+    (fn [x y] (fun y x))) quot)
+
+  ;; Problem 47, Contain Yourself
+  4
+
+  ;; Problem 48, Intro to some
+  6
+
+  ;; Problem 49, Split a sequence
+  (fn [split-at-i sqn]
+     [(take split-at-i sqn) (drop split-at-i sqn)])
  )
