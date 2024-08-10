@@ -117,10 +117,10 @@
   ;; Problem 30, Compress a Sequence
   (fn [s]
     (let [deduImpl (fn [ns [x & xs]]
-                    (cond (empty? xs) (conj ns x)
-                          (= x (first xs)) (recur ns xs)
-                          :else (recur (conj ns x) xs)))]
-         (deduImpl [] s)))
+                     (cond (empty? xs) (conj ns x)
+                           (= x (first xs)) (recur ns xs)
+                           :else (recur (conj ns x) xs)))]
+      (deduImpl [] s)))
 
   ;; Problem 31, Pack a Sequence
   #(partition-by identity %)
@@ -133,10 +133,10 @@
 
   ;; Problem 34, Implement range 
   (fn [lb ub]
-     (loop [s [lb]]
-       (if (= (last s) (- ub 1))
-         s 
-         (recur (conj s (inc (last s)))))))
+    (loop [s [lb]]
+      (if (= (last s) (- ub 1))
+        s
+        (recur (conj s (inc (last s)))))))
   ;; Problem 35, Local bindings
   7
 
@@ -148,17 +148,17 @@
 
   ;; Problem 38, Maximum value
   (fn [& x]
-     (loop [max (first x) rx (rest x)]
-       (if (empty? rx)
-         max
-         (recur (if (< max (first rx)) (first rx) max) (rest rx)))))
+    (loop [max (first x) rx (rest x)]
+      (if (empty? rx)
+        max
+        (recur (if (< max (first rx)) (first rx) max) (rest rx)))))
 
   ;; Problem 39, Interleave Two Seqs
   (fn [sqa sqb]
-     (loop [sqab [] sqa sqa sqb sqb]
-       (if (or (empty? sqa) (empty? sqb))
-         sqab 
-         (recur (conj sqab (first sqa) (first sqb)) (rest sqa) (rest sqb)))))
+    (loop [sqab [] sqa sqa sqb sqb]
+      (if (or (empty? sqa) (empty? sqb))
+        sqab
+        (recur (conj sqab (first sqa) (first sqb)) (rest sqa) (rest sqb)))))
 
   ;; Problem 40, Interpose a Seq
   (fn [in sq]
@@ -172,16 +172,16 @@
              :else (recur (inc i) (rest sq) (conj nsq (first sq)))))) [1 2 3 4 5 6 7 8] 3)
 
   ;; Problem 42, Factorial Fun
-  (#(reduce * (range 1 (inc %))) 5) 
+  (#(reduce * (range 1 (inc %))) 5)
 
   ;; Problem 43, Reverse Interleave
   (fn [sq x]
-     (->> sq 
-          (partition x)
-          (apply map vector)))
+    (->> sq
+         (partition x)
+         (apply map vector)))
 
   ;; Problem 44, Rotate Sequence
-  (fn [n sqn] 
+  (fn [n sqn]
     (let [steps (mod n (count sqn))
           n-el (take steps sqn)
           rest-sqn (drop steps sqn)]
@@ -192,7 +192,7 @@
 
   ;; Problem 46, Flipping out
   ((fn [fun]
-    (fn [x y] (fun y x))) quot)
+     (fn [x y] (fun y x))) quot)
 
   ;; Problem 47, Contain Yourself
   4
@@ -202,5 +202,48 @@
 
   ;; Problem 49, Split a sequence
   (fn [split-at-i sqn]
-     [(take split-at-i sqn) (drop split-at-i sqn)])
- )
+    [(take split-at-i sqn) (drop split-at-i sqn)])
+
+  ;; Problem 50, Split by Type
+  #(vals (group-by type %))
+
+  ;; Problem 51, Advanced Destructuring
+  [1 2 3 4 5]
+
+  ;; Problem 52, Intro to Destructuring
+  [c e]
+
+  ;; Problem 53, Longest Increasing Sub-Seq
+  (fn [s]
+    (loop [remaining s longest-seq [] current-seq []]
+      (if (empty? remaining)
+        longest-seq
+        (let [current-num (first remaining)
+              rest-nums (rest remaining)
+              should-extend? (or (empty? current-seq) (> current-num (last current-seq)))
+              new-current-seq (if should-extend? (conj current-seq current-num) [current-num])
+              count-new-current-seq (count new-current-seq)
+              is-new-longest? (and (> count-new-current-seq 1) (> count-new-current-seq (count longest-seq)))
+              new-longest-seq (if is-new-longest? new-current-seq longest-seq)]
+          (recur rest-nums new-longest-seq new-current-seq)))))
+
+  ;; Problem 54, Partition a Sequence
+  (fn [x s]
+    (loop [remaining s res []]
+      (if (empty? remaining)
+        res
+        (let [current-sub-seq (take x remaining)
+              new-remaining (drop x remaining)
+              complete-sub-s? (= (count current-sub-seq) x)
+              new-res (if complete-sub-s? (conj res current-sub-seq) res)]
+          (recur new-remaining new-res)))))
+
+  ;; Problem 55, Count Occurences
+  (fn [s] (reduce #(update %1 %2 (fnil inc 0)) {} s))
+
+  ;; Problem 56, Find Distinct Items
+  (fn [s] (reduce (fn [acc cur]
+                          (if (some #{cur} acc)
+                            acc
+                            (conj acc cur))) [] s))
+  )
